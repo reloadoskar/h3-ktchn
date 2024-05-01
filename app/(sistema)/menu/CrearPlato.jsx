@@ -2,12 +2,11 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import ModalDialog from '@/components/ModalDialog'
 import { useMenu } from './MenuContext'
-// import { useSession } from 'next-auth/react'
-// import { toast } from 'sonner'
 import { useCategorias } from './CategoriasContext'
 import CrearCategoria from './CrearCategoria'
 import CrearSubCategoria from './CrearSubCategoria'
 import { useSubcategorias } from './SubcategoriasContext'
+
 export default function CrearPlato({database}) {
   const { crearPlato } = useMenu()
   const { categorias, } = useCategorias()
@@ -85,7 +84,6 @@ export default function CrearPlato({database}) {
 
     crearPlato(formData).then(res => {
       // console.log(res)
-      toast.success(res.message)
       clearFields()
       close()
     }).catch(err => {

@@ -43,3 +43,30 @@ export async function POST(request) {
         return NextResponse.json({ message: "No se guardo el plato: " + error }, { status: 400 })
     }
 }
+
+export async function PUT(request) {
+
+    const {data} = await request.json()
+    // console.log(data)
+    if (!data.database) {
+        return NextResponse.json({ message: "Datos incompletos" }, { status: 401 })
+    }
+    try {
+        await dbConnect(data.database)
+        const platoInfo = {
+            _id: data._id,
+            nombre: data.nombre,
+            categoria: data.categoria,
+            subcategoria: data.subcategoria,
+            descripcion: data.descripcion,
+            precio: data.precio,
+        }
+        const platoUpdated = await Plato.findOneAndUpdate({_id: data._id}, platoInfo, {new:true})
+        if(!platoUpdated){return NextResponse.json({message:"Error: " +error.message},{status:401})}
+        return NextResponse.json({message:"Plato actualizado"},{status:200})
+        
+    } catch (error) {
+        console.log(error)
+        return NextResponse.json({message:"Error: "+error.message},{stats:401})
+    }
+}

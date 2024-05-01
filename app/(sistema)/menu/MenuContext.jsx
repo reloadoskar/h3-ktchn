@@ -8,6 +8,8 @@ export const useMenu = () => {
 }
 export const MenuContextProvider = (props) => {
     const [menu, setMenu] = useState([])
+    const [plato, setPlato] = useState(null)
+    const [platoSeleccionado, setPlatosel] = useState(null)
 
     const loadMenu = useCallback(async (database) => {
         if (database) {
@@ -33,10 +35,26 @@ export const MenuContextProvider = (props) => {
         }
     }
 
+    const editarPlato = async (data) => {
+        if(data){
+            const res = await fetch("/api/menu/plato",{
+                method:'PUT',
+                body: JSON.stringify({data:data})
+            })
+            const dt = await res.json()
+            return setPlatosel(dt.plato)
+        }
+    }
+
+    const selectPlato = (plt) =>{
+        setPlatosel(plt)
+    }
+
     return (
         <MenuContext.Provider value={{
             menu,
-            loadMenu, crearPlato
+            loadMenu, crearPlato, selectPlato, platoSeleccionado,
+            editarPlato,
         }}>
             {props.children}
         </MenuContext.Provider>
