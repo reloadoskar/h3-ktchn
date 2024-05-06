@@ -25,7 +25,7 @@ export default function Navigation({payload}) {
 	}
 
 	useEffect(() => {
-		if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+		if (window.matchMedia("(prefers-color-scheme: 'dark')").matches) {
 			setTheme("dark")
 		}
 		setTheme("light")		
@@ -91,7 +91,7 @@ export default function Navigation({payload}) {
 					<h1 className="text-2xl font-bold text-center">H A D R I A 3</h1>
 				</div>
 				<div className="px-3 py-2 flex gap-2">
-					{theme === "dark" ? <Moon /> : <Sun />} <Switch value={theme === "dark" ? true : false} action={handleChange} />
+					{theme === "dark" ? <Moon /> : <Sun />} <Switch label="darkmode" value={theme === "dark" ? true : false} action={handleChange} />
 				</div>
 				<div className="flex-1">
 					<nav>

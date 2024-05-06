@@ -14,7 +14,9 @@ export default async function Layout({ children }) {
       <div className="flex flex-col">
         <SettingsContextProvider>
           <Navigation payload={payload} />
-          {children}
+          <div className="pl-12 pr-6">
+            {children}
+          </div>
         </SettingsContextProvider>
       </div>
     )

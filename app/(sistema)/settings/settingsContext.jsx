@@ -7,16 +7,7 @@ export const useSettings = () => {
     return useContext(SettingsContext)
 }
 export const SettingsContextProvider = (props) => {
-    const [settings, setSettings] = useState({
-        tipo: "",
-        nombre: "",
-        direccion: "",
-        telefono: "",
-        email: "",
-        plan: "",
-        periodo:"",
-        precio:0,
-    }) 
+    const [settings, setSettings] = useState(null) 
             
     // La función fetch que se memoriza con useCallback 
     const loadSettings = useCallback(async (database) => { 

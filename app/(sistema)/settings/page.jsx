@@ -13,7 +13,7 @@ export default function Settings() {
       { id: "PRO", name: "PROFESIONAL", sucursales: 5, usuarios: 10, precioa: 4499, preciob: 12799, precioc: 17799, preciod: 32499 },
       { id: "ADVANCED", name: "AVANZADO", sucursales: 10, usuarios: 30, precioa: 8999, preciob: 9899, precioc: 17799, preciod: 32499 }
     ]
-    if (settings.plan) {
+    if (settings) {
       let filtro = plans.filter(plan => plan.id === settings.plan)
       return setPlansel(filtro[0])
     }
@@ -32,7 +32,7 @@ export default function Settings() {
     })
   }
 
-  return (
+  return !settings ? null :
     <div className='p-6 w-full flex flex-col gap-4'>
       <form onSubmit={handleSubmit} className='form'>
         <h1 className='text-lg uppercase font-bold'>Configuración</h1>
@@ -90,5 +90,5 @@ export default function Settings() {
         </div>
       </form>
     </div>
-  )
+  
 }

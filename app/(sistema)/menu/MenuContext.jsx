@@ -39,10 +39,28 @@ export const MenuContextProvider = (props) => {
         if(data){
             const res = await fetch("/api/menu/plato",{
                 method:'PUT',
-                body: JSON.stringify({data:data})
+                body: JSON.stringify(data)
             })
             const dt = await res.json()
-            return setPlatosel(dt.plato)
+            // console.log(dt)
+            let platosSinOriginal = menu.filter(plt=>plt._id!==data._id)
+            platosSinOriginal.push(dt.plato)
+            setMenu(platosSinOriginal)
+            return dt
+        }
+    }
+
+    const eliminarPlato = async (database, plato) =>{
+        if(database){
+            const res = await fetch("/api/menu/plato",{
+                method: 'DELETE',
+                body: JSON.stringify({database, plato})
+            })
+            const dt = await res.json()
+            if(dt){
+                setMenu(menu.filter(plt=>plt._id !== plato._id))
+            }
+            return dt
         }
     }
 
@@ -54,7 +72,7 @@ export const MenuContextProvider = (props) => {
         <MenuContext.Provider value={{
             menu,
             loadMenu, crearPlato, selectPlato, platoSeleccionado,
-            editarPlato,
+            editarPlato, eliminarPlato,
         }}>
             {props.children}
         </MenuContext.Provider>

@@ -7,10 +7,10 @@ import CrearCategoria from './CrearCategoria'
 import CrearSubCategoria from './CrearSubCategoria'
 import { useSubcategorias } from './SubcategoriasContext'
 
-export default function CrearPlato({database}) {
+export default function CrearPlato({ database }) {
   const { crearPlato } = useMenu()
   const { categorias, } = useCategorias()
-  const {subcategorias} = useSubcategorias()
+  const { subcategorias } = useSubcategorias()
   const [open, setOpen] = useState(false)
   const [openCat, setOpencat] = useState(false)
 
@@ -19,17 +19,17 @@ export default function CrearPlato({database}) {
   const [categoria, setCategoria] = useState("")
   const [subcategoria, setSubCategoria] = useState("")
   const [openSubCat, setOpenSubCat] = useState(false)
-  useEffect(()=>{
-    if(categoria==="NEW"){
+  useEffect(() => {
+    if (categoria === "NEW") {
       return setOpencat(true)
     }
-  },[categoria])
+  }, [categoria])
 
-  useEffect(()=>{
-    if(subcategoria==="NVO"){
+  useEffect(() => {
+    if (subcategoria === "NVO") {
       return setOpenSubCat(true)
     }
-  },[subcategoria])
+  }, [subcategoria])
 
   const [descripcion, setDescripcion] = useState("")
   const [precio, setPrecio] = useState(0)
@@ -126,7 +126,7 @@ export default function CrearPlato({database}) {
       <button className='boton' onClick={() => setOpen(!open)}>Crear Plato</button>
       <ModalDialog open={open} close={close}>
         <div className='overflow-scroll'>
-          <form ref={ref} className='form' onSubmit={handleSubmit}>
+          <form ref={ref} className='form bg-indigo-100' onSubmit={handleSubmit}>
             <h1 className='titulo'>Nuevo Plato</h1>
             <label className='text-gray-900 dark:text-gray-400' htmlFor='nombre'>Nombre del plato</label>
             <input id="nombre" name="nombre"
@@ -140,7 +140,7 @@ export default function CrearPlato({database}) {
               className='inputbasico mt-0'
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)} >
-                <option></option>
+              <option></option>
               {categorias.length > 0 ?
                 categorias.map(categoria => (
                   <option key={categoria._id} value={categoria.nombre}>{categoria.nombre}</option>
@@ -148,7 +148,7 @@ export default function CrearPlato({database}) {
                 : null}
               <option value="NEW">Agregar categoría...</option>
             </select>
-            <CrearCategoria database={database} open={openCat} close={()=>setOpencat(false)}/>
+            <CrearCategoria database={database} open={openCat} close={() => setOpencat(false)} />
 
             <label className='text-gray-900 dark:text-gray-400' htmlFor='subcategoria'>Sub Categoría</label>
             <select id="subcategoria" name="subcategoria"
@@ -163,7 +163,7 @@ export default function CrearPlato({database}) {
                 : null}
               <option value="NVO">Agregar Sub Categoría...</option>
             </select>
-            <CrearSubCategoria database={database} open={openSubCat} close={()=>setOpenSubCat(false)} />
+            <CrearSubCategoria database={database} open={openSubCat} close={() => setOpenSubCat(false)} />
 
             <label className='text-gray-900 dark:text-gray-400' htmlFor='descripcion'>Descripción</label>
             <textarea id="descripcion" name="descripicion"
@@ -193,7 +193,10 @@ export default function CrearPlato({database}) {
                 </div>
               ))}
             </div>
-            <button type="submit" className='boton w-full'>Guardar</button>
+            <div className='flex gap-2'>
+              <button type="button" className='botonrojo w-full' onClick={close}>cancelar</button>
+              <button type="submit" className='boton w-full'>Guardar</button>
+            </div>
           </form>
         </div>
       </ModalDialog>

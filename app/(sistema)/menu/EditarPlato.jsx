@@ -5,7 +5,7 @@ import { useCategorias } from "./CategoriasContext";
 import { useSubcategorias } from "./SubcategoriasContext";
 
 export default function EditarPlato({ plato, database }) {
-    const { selectPlato, editarPlato } = useMenu()
+    const { selectPlato, editarPlato, eliminarPlato } = useMenu()
     const { categorias, } = useCategorias()
     const { subcategorias } = useSubcategorias()
     const [platoEditable, setPlatoeditable] = useState(null)
@@ -28,7 +28,18 @@ export default function EditarPlato({ plato, database }) {
             filepath: platoEditable.filepath,
         }
         editarPlato(platoEditado).then(res=>{
-            console.log(res)
+            console.log(res.message)
+            close()
+        })
+    }
+
+    const close = () =>{
+        selectPlato(null)
+    }
+
+    const handleDelete = () => {
+        eliminarPlato(database, plato).then(()=>{
+            selectPlato(null)
         })
     }
 
@@ -88,6 +99,12 @@ export default function EditarPlato({ plato, database }) {
                         className='inputbasico mt-0'
                         value={platoEditable.precio}
                         onChange={(e) => setPlatoeditable({ ...platoEditable, [e.target.name]: e.target.value })} />
+                    
+                    <button 
+                        type="button" 
+                        className="mx-auto text-center p-4 w-full text-red-400 hover:text-red-300"
+                        onClick={handleDelete}>Eliminar plato</button>
+                    
                     <div className="flex gap-2">
                         <button type="button" className='botonrojo w-full' onClick={()=> selectPlato(null)}>cancelar</button>
                         <button type="submit" className='boton w-full'>Guardar cambios</button>
