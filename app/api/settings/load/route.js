@@ -5,6 +5,7 @@ import Setting from "@/models/setting"
 export async function POST(request){
     const data = await request.json()
     if(!data.database){
+        // console.log(data.database)
         return NextResponse.json({message:"Datos incompletos"}, {status:400})
     }
     try {

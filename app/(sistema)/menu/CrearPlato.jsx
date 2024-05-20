@@ -125,7 +125,7 @@ export default function CrearPlato({ database }) {
     <>
       <button className='boton w-full' onClick={() => setOpen(!open)}>Crear Plato</button>
       <ModalDialog open={open} close={close}>
-        <div className=''>
+        <div className='overflow-auto'>
           <form ref={ref} className='form bg-indigo-100' onSubmit={handleSubmit}>
             <h1 className='titulo'>Nuevo Plato</h1>
             <label className='text-gray-900 dark:text-gray-400' htmlFor='nombre'>Nombre del plato</label>
