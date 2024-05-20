@@ -30,7 +30,8 @@ export default function Menu() {
   }, [user])
 
   return (
-    <div className='p-6 w-full flex flex-col gap-4'>
+    <div className='pr-4 py-4 w-full flex flex-col gap-4'>
+      <h1 className='titulo'>Menú</h1>
       <CrearPlato database={user?.database} />
       <EditarPlato plato={platoSeleccionado} database={user?.database} />
       <Buscador />

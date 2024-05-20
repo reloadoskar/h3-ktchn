@@ -62,7 +62,7 @@ export async function PUT(request) {
             precio: data.precio,
         }
         const platoUpdated = await Plato.findOneAndUpdate({_id: data._id}, platoInfo, {new:true})
-        if(!platoUpdated){return NextResponse.json({message:"Error: " +error.message},{status:401})}
+        if(!platoUpdated){return NextResponse.json({message:"Error: "},{status:401})}
         return NextResponse.json({message:"Plato actualizado", plato: platoUpdated},{status:200})
         
     } catch (error) {

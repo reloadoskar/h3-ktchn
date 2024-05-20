@@ -2,6 +2,7 @@ import { jwtVerify } from "jose";
 import Navigation from "./Navigation";
 import SettingsContextProvider from "./settings/settingsContext";
 import { cookies } from "next/headers";
+import ReservasContextProvider from "./reservas/ReservasContext";
 
 
 export default async function Layout({ children }) {
@@ -13,10 +14,12 @@ export default async function Layout({ children }) {
     return (
       <div className="flex flex-col">
         <SettingsContextProvider>
-          <Navigation payload={payload} />
-          <div className="pl-12 pr-6">
-            {children}
-          </div>
+          <ReservasContextProvider>
+            <Navigation payload={payload} />
+            <div className="pl-12 pr-6">
+              {children}
+            </div>
+          </ReservasContextProvider>
         </SettingsContextProvider>
       </div>
     )

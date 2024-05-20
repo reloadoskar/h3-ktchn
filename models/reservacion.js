@@ -9,7 +9,7 @@ var ReservacionSchema = Schema({
     personas:{type:Number},
     ocacion:{type:String},
     comentario:{type:String},
-    status:{type:String}
+    status:{type:String, default: "PENDIENTE", }
 },{
     timestamps: true
 });

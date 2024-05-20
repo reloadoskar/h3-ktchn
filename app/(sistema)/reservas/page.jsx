@@ -1,98 +1,79 @@
 'use client'
+import React, { useState, useEffect } from 'react'
 import Switch from '@/components/Switch'
-import React, { useState } from 'react'
+import { Search, X } from 'lucide-react'
+import CrearReserva from './CrearReserva'
+import Reservas from './Reservas'
+import { useReservas } from './ReservasContext'
+import { useAuth } from '@/components/auth/AuthContext'
+import EditarReserva from './EditarReserva'
 
-const reservas = [
-    {
-        nombre: "Carlos Gregorio", email: "carlogrego@mail.com",
-        telefono: 5545457878,
-        fecha: "2024-05-10",
-        horario: "18:00",
-        personas: 4,
-        ocacion: "NE",
-        comentario: "",
-        status: "PENDIENTE"
-    },
-    {
-        nombre: "Rodrigo Madrigal", email: "rodrigu@mail.com",
-        telefono: 554457878,
-        fecha: "2024-05-12",
-        horario: "12:00",
-        personas: 2,
-        ocacion: "NE",
-        comentario: "",
-        status: "CONFIRMADA"
-    },
-    {
-        nombre: "Mildred Embrosco", email: "mildred@mail.com",
-        telefono: 5547487777,
-        fecha: "2024-05-10",
-        horario: "13:00",
-        personas: 6,
-        ocacion: "CUMPLEAÑOS",
-        comentario: "",
-        status: "PENDIENTE"
-    },
-    {
-        nombre: "Mauro Moro", email: "maumo@mail.com",
-        telefono: 554754444,
-        fecha: "2024-05-10",
-        horario: "10:00",
-        personas: 2,
-        ocacion: "ANIVERSARIO",
-        comentario: "",
-        status: "CANCELADO"
-    },
-    {
-        nombre: "Mildred Bahara", email: "mildred@mail.com",
-        telefono: 5550454777,
-        fecha: "2024-05-10",
-        horario: "20:00",
-        personas: 2,
-        ocacion: "",
-        comentario: "",
-        status: "TERMINADA"
-    },
-]
-export default function Reservas() {
-    const [verTerminadas, setVerterminadas] = useState(false)
-    const handleVerTerminadas = () =>{
-        return setVerterminadas(prevVer => prevVer === false ? true : false)
-    }    
-    return (
-        <div className='flex flex-col mt-6'>
-            <h1 className='titulo pb-4'>Reservas</h1>
-            <div className='flex gap-2 p-4'>
-                <p>Ver Terminadas</p>
-                <Switch label="verterminadas" value={verTerminadas} action={handleVerTerminadas} />
-            </div>
-            <table className='bg-gray-300 dark:bg-gray-800 rounded-md'>
-                <thead >
-                    <tr className=''>
-                        <th>Nombre</th>
-                        <th>Fecha</th>
-                        <th>Horario</th>
-                        <th>Personas</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody className='px-4'>
-                    {reservas.map(reserva => (
-                        <tr key={reserva.nombre} 
-                        className='hover:bg-gray-100 dark:hover:bg-gray-500 odd:bg-gray-50 dark:odd:bg-gray-700 cursor-pointer' >
-                            <td className='px-4'>{reserva.nombre}</td>
-                            <td>{reserva.fecha}</td>
-                            <td>{reserva.horario}</td>
-                            <td className='text-right px-4'>{reserva.personas}</td>
-                            <td className="flex px-4 gap-2 items-center">
-                                <svg className='fill-current' height="10" width="10" xmlns="http://www.w3.org/2000/svg" >
-                                    <circle fill={reserva.status === "PENDIENTE" ? "rgb(254, 254, 100)" : reserva.status === "CANCELADO" ? "rgb(244, 63, 94)" : reserva.status === "CONFIRMADA"? "rgb(52, 211, 153)" : "rgb(160, 50, 160)"} r="5" cx="5" cy="5" />
-                                </svg>
-                                {reserva.status}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    )
+export default function Page() {
+	const { user, autenticado } = useAuth()
+	const { reservas, reservaSelected, loadReservas, reservasFounded, buscarReserva, } = useReservas()
+	const [verTerminadas, setVerterminadas] = useState(false)
+	const [busqueda, setBusqueda] = useState("")
+	const [buscarPor, setBuscarpor] = useState("nombre")
+	const handleVerTerminadas = () => {
+		return setVerterminadas(prevVer => prevVer === false ? true : false)
+	}
+	useEffect(() => {
+		if (user) {
+			const loadAll = async () => {
+				const res = await Promise.all([
+					loadReservas(user.database)
+				])
+				return res
+			}
+			loadAll()
+		}
+	}, [user])
+
+	useEffect(()=>{
+		if(busqueda){
+			if(busqueda.length > 0){
+				buscarReserva(buscarPor, busqueda)
+			}
+		}
+	},[busqueda])
+	return (
+		<div className='pr-4 py-4 w-full flex flex-col gap-4'>
+			<h1 className='titulo'>Reservas</h1>
+			<div className='items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+				<div className='flex gap-2 inputbasico w-full'>
+					<Search />
+					<select name="buscarPor" 
+						className='bg-transparent'
+						value={buscarPor}
+						onChange={(e)=>setBuscarpor(e.target.value)}>
+						<option value="nombre">NOMBRE</option>
+						<option value="fecha">FECHA</option>
+						<option value="horario">HORARIO</option>
+					</select>
+					<input name="busqueda" 
+						type="text"
+						className='bg-transparent focus:border-none focus:outline-none w-full ' 
+						placeholder='Buscar...' 
+						value={busqueda}
+						onChange={(e)=>setBusqueda(e.target.value)}
+					/>
+					{busqueda === "" ? null :
+						<button className='text-gray-900 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-100' onClick={()=>setBusqueda("")}>
+							<X />
+						</button>
+					}
+				</div>
+				<CrearReserva />
+				<EditarReserva reserva={reservaSelected} database={user?.database} /> 
+				<div className='flex gap-2 p-4 w-full justify-center'>
+					<p>Ver Terminadas</p>
+					<Switch label="verterminadas" value={verTerminadas} action={handleVerTerminadas} />
+				</div>
+
+			</div>
+
+			<Reservas reservas={!busqueda ? reservas: reservasFounded} />
+
+		</div>
+	)
 }
